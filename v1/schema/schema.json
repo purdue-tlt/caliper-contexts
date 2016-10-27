@@ -76,7 +76,6 @@
 			"$ref": "#/definitions/NullableString"
 		},
 
-		/* JSON-LD */
 		"JsonLdContext": {
 			"description": "A link to a valid JSON-LD context file, that maps term names to contexts.",
 			"oneOf": [{
@@ -122,7 +121,6 @@
 			],
 		},
 
-		/* schema.org */
 		"schema:Thing": {
 			"type": "object",
 			"description": "http://schema.org/Thing"
@@ -164,13 +162,11 @@
 			}]
 		},
 
-		/* foaf */
 		"foaf:Agent": {
 			"description": "An entity that can do things. Typical kinds of agents include people, organizations and software systems. See http://xmlns.com/foaf/spec/#term_Agent",
 			"$ref": "#/definitions/JsonLdObject"
 		},
 
-		/* w3c */
 		"w3c:Organization": {
 			"type": "object",
 			"properties": {
@@ -234,7 +230,6 @@
 			}
 		},
 
-		/* Base */
 		"caliper:Context": {
 			"allOf": [{
 				"$ref": "#/definitions/JsonLdContext"
@@ -354,7 +349,6 @@
 			}
 		},
 
-		/* Agent */
 		"caliper:SoftwareApplication": {
 			"allOf": [{
 				"$ref": "#/definitions/schema:SoftwareApplication"
@@ -389,7 +383,6 @@
 			}
 		},
 
-		/* LIS */
 		"caliper:lis:Person": {
 			"allOf": [{
 				"$ref": "#/definitions/foaf:Agent"
@@ -423,7 +416,6 @@
 			"allOf": [{
 				"$ref": "#/definitions/w3c:Role"
 			}],
-			/* "enum": [] TODO: Add all Role values */
 		},
 		"caliper:lis:Status": {
 			"allOf": [{
@@ -504,7 +496,6 @@
 			}
 		},
 
-		/* Session */
 		"caliper:Session": {
 			"description": "Caliper Session",
 			"allOf": [{
@@ -531,7 +522,6 @@
 			}
 		},
 
-		/* Reading */
 		"caliper:EPubChapter": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseDigitalResource"
@@ -644,7 +634,6 @@
 			}
 		},
 
-		/* Annotation */
 		"caliper:BaseAnnotation": {},
 		"caliper:Annotation": {},
 		"caliper:BookmarkAnnotation": {},
@@ -652,7 +641,6 @@
 		"caliper:SharedAnnotation": {},
 		"caliper:TagAnnotation": {},
 
-		/* Assignable */
 		"caliper:BaseAssignableDigitalResource": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseDigitalResource"
@@ -719,7 +707,6 @@
 			},
 		},
 
-		/* Assessment */
 		"caliper:Assessment": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseAssignableDigitalResource"
@@ -739,7 +726,6 @@
 			}
 		},
 
-		/* AssessmentItem */
 		"caliper:AssessmentItem": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseAssignableDigitalResource"
@@ -763,10 +749,8 @@
 		"caliper:SelectTextResponse": {},
 		"caliper:TrueFalseResponse": {},
 
-		/* Outcome */
 		"caliper:Result": {},
 
-		/* Media */
 		"caliper:MediaLocation": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseDigitalResource"
@@ -866,7 +850,6 @@
 			"format": "uri"
 		},
 
-		/* Events */
 		"caliper:Event": {
 			"description": "Core caliper event structure and base class for all events",
 			"allOf": [{
@@ -908,7 +891,7 @@
 				},
 				"group": {
 					"oneOf": [{
-						"$ref": "#/definitions/w3c:Organization" /* Should this be an instance? */
+						"$ref": "#/definitions/w3c:Organization"
 					}, {
 						"type": "null"
 					}]
@@ -940,9 +923,6 @@
 					"type": "string",
 					"format": "regex",
 					"pattern": "http://purl.imsglobal.org/caliper/v1/SessionEvent"
-				},
-				"generated": {
-					"$ref": "#/definitions/caliper:Session"
 				}
 			},
 			"oneOf": [{
@@ -950,15 +930,22 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut"
+						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn"
 					},
 					"generated": {
-						"properties": {
-							"endedAtTime": {
-								"$ref": "#/definitions/DateTime"
-							}
-						},
-						"required": ["endedAtTime"]
+						"oneOf": [{
+							"type": "null"
+						}, {
+							"allOf": [{
+								"$ref": "#/definitions/caliper:Session"
+							}],
+							"properties": {
+								"startedAtTime": {
+									"$ref": "#/definitions/DateTime"
+								}
+							},
+							"required": ["startedAtTime"]
+						}]
 					}
 				}
 			}, {
@@ -966,15 +953,22 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn"
+						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut"
 					},
 					"generated": {
-						"properties": {
-							"startedAtTime": {
-								"$ref": "#/definitions/DateTime"
-							}
-						},
-						"required": ["startedAtTime"]
+						"oneOf": [{
+							"type": "null"
+						}, {
+							"allOf": [{
+								"$ref": "#/definitions/caliper:Session"
+							}],
+							"properties": {
+								"endedAtTime": {
+									"$ref": "#/definitions/DateTime"
+								}
+							},
+							"required": ["endedAtTime"]
+						}]
 					}
 				}
 			}, {
@@ -983,6 +977,13 @@
 						"type": "string",
 						"format": "regex",
 						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut"
+					},
+					"generated": {
+						"oneOf": [{
+							"type": "null"
+						}, {
+							"$ref": "#/definitions/caliper:Session"
+						}]
 					}
 				}
 			}]
@@ -1116,7 +1117,6 @@
 			}]
 		},
 
-		/* Collections */
 		"caliper:Agents": {
 			"description": "Collection of all Caliper Agents",
 			"anyOf": [{
