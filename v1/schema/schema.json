@@ -1124,9 +1124,12 @@
 					"pattern": "http://purl.imsglobal.org/caliper/v1/MediaLocation"
 				},
 				"currentTime": {
-					"$ref": "#/definitions/NullableNumber"
+					"type": "number"
 				}
-			}
+			},
+			"required": [
+				"currentTime"
+			]
 		},
 		"caliper:BaseMediaObject": {
 			"allOf": [{
@@ -1212,7 +1215,7 @@
 			"format": "uri"
 		},
 
-		"caliper:Event": {
+		"caliper:BaseEvent": {
 			"description": "Core caliper event structure and base class for all events",
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Object"
@@ -1277,9 +1280,22 @@
 			]
 		},
 
+		"caliper:Event": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/Event"
+				}
+			},
+		},
+
 		"caliper:SessionEvent": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
 			"properties": {
 				"@type": {
@@ -1357,7 +1373,7 @@
 
 		"caliper:NavigationEvent": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
 			"properties": {
 				"@type": {
@@ -1387,7 +1403,7 @@
 		},
 		"caliper:ViewEvent": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
 			"properties": {
 				"@type": {
@@ -1407,7 +1423,7 @@
 		},
 		"caliper:SearchedEvent": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
 			"properties": {
 				"@type": {
@@ -1434,7 +1450,7 @@
 
 		"caliper:AnnotationEvent": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
 			"properties": {
 				"@type": {
@@ -1498,7 +1514,7 @@
 
 		"caliper:AssessmentEvent": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
 			"properties": {
 				"@type": {
@@ -1548,7 +1564,7 @@
 
 		"caliper:AssessmentItemEvent": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
 			"properties": {
 				"@type": {
@@ -1632,7 +1648,7 @@
 
 		"caliper:AssignableEvent": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
 			"properties": {
 				"@type": {
@@ -1706,7 +1722,7 @@
 
 		"caliper:OutcomeEvent": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
 			"properties": {
 				"@type": {
@@ -1737,7 +1753,57 @@
 
 		"caliper:MediaEvent": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/MediaEvent"
+				},
+				"object": {
+					"$ref": "#/definitions/caliper:MediaObjects"
+				}
+			},
+			"oneOf": [{
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#OpenedPopout",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ClosedPopout",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#EnteredFullScreen",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ExitedFullScreen",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSize",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedResolution",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Ended",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSpeed",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Muted",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Unmuted",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedVolume",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#EnabledClosedCaptioning",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#DisabledClosedCaptioning"
+						]
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Started",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Rewound",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Resumed",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ForwardedTo",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Paused",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#JumpedTo"
+						]
+					},
+					"target": {
+						"$ref": "#/definitions/caliper:MediaLocation"
+					}
+				},
+				"required": [
+					"target"
+				]
 			}]
 		},
 
@@ -1749,6 +1815,21 @@
 				"$ref": "#/definitions/caliper:SoftwareApplication"
 			}, {
 				"$ref": "#/definitions/caliper:Organization"
+			}]
+		},
+		"caliper:MediaObjects": {
+			"description": "Collection of all Caliper MediaObjects",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseMediaObject"
+			}],
+			"anyOf": [{
+				"$ref": "#/definitions/caliper:MediaObject"
+			}, {
+				"$ref": "#/definitions/caliper:AudioObject"
+			}, {
+				"$ref": "#/definitions/caliper:ImageObject"
+			}, {
+				"$ref": "#/definitions/caliper:VideoObject"
 			}]
 		},
 		"caliper:Responses": {
@@ -1821,9 +1902,11 @@
 		"caliper:Events": {
 			"description": "Collection of all Caliper Events",
 			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
+				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
 			"anyOf": [{
+				"$ref": "#/definitions/caliper:Event"
+			}, {
 				"$ref": "#/definitions/caliper:SessionEvent"
 			}, {
 				"$ref": "#/definitions/caliper:NavigationEvent"
@@ -1841,6 +1924,8 @@
 				"$ref": "#/definitions/caliper:AssignableEvent"
 			}, {
 				"$ref": "#/definitions/caliper:OutcomeEvent"
+			}, {
+				"$ref": "#/definitions/caliper:MediaEvent"
 			}]
 		}
 	}
