@@ -304,7 +304,7 @@
 				},
 				"isPartOf": {
 					"oneOf": [{
-						"$ref": "#/definitions/schema:CreativeWork"
+						"$ref": "#/definitions/caliper:DigitalResources"
 					}, {
 						"type": "null"
 					}]
@@ -554,7 +554,7 @@
 		},
 		"caliper:EPubSubChapter": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:DigitalResource"
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
 			}],
 			"properties": {
 				"@type": {
@@ -593,7 +593,7 @@
 		},
 		"caliper:Reading": {
 			"allOf": [{
-				"$ref": "#/definitions/caliper:DigitalResource"
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
 			}],
 			"properties": {
 				"@type": {
@@ -638,6 +638,11 @@
 					"$ref": "#/definitions/Duration"
 				}
 			}
+		},
+		"caliper:SearchResult": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}]
 		},
 
 		"caliper:BaseAnnotation": {
@@ -773,13 +778,22 @@
 				"$ref": "#/definitions/caliper:BaseDigitalResource"
 			}],
 			"properties": {
+				"dateCreated": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"dateModified": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"datePublished": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"dateToStartOn": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
 				"dateToActivate": {
 					"$ref": "#/definitions/NullableDateTime"
 				},
 				"dateToShow": {
-					"$ref": "#/definitions/NullableDateTime"
-				},
-				"dateToStartOn": {
 					"$ref": "#/definitions/NullableDateTime"
 				},
 				"dateToSubmit": {
@@ -813,25 +827,43 @@
 				"$ref": "#/definitions/caliper:Entity"
 			}],
 			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/Attempt"
+				},
 				"actor": {
-					"$ref": "#/definitions/caliper:Agents"
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Agents"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"assignable": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"count": {
+					"$ref": "#/definitions/NullableInteger"
+				},
+				"startedAtTime": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"endedAtTime": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"duration": {
+					"$ref": "#/definitions/Duration"
 				}
 			},
-			"assignable": {
-				"$ref": "#/definitions/caliper:AssignableDigitalResources"
-			},
-			"count": {
-				"$ref": "#/definitions/NullableInteger"
-			},
-			"startedAtTime": {
-				"$ref": "#/definitions/NullableDateTime"
-			},
-			"endedAtTime": {
-				"$ref": "#/definitions/NullableDateTime"
-			},
-			"duration": {
-				"$ref": "#/definitions/Duration"
-			},
+			"required": [
+				"actor"
+			]
 		},
 
 		"caliper:Assessment": {
@@ -868,13 +900,156 @@
 				}
 			}
 		},
-		"caliper:BaseResponse": {},
-		"caliper:Response": {},
-		"caliper:FillinBlankResponse": {},
-		"caliper:MultipleChoiceResponse": {},
-		"caliper:MultipleResponseResponse": {},
-		"caliper:SelectTextResponse": {},
-		"caliper:TrueFalseResponse": {},
+
+		"caliper:BaseResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"assignable": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Agents"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"actor": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Agents"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"attempt": {
+					"$ref": "#/definitions/caliper:Attempt"
+				},
+				"startedAtTime": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"endedAtTime": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"duration": {
+					"$ref": "#/definitions/Duration"
+				}
+			}
+		},
+		"caliper:Response": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/Response"
+				}
+			}
+		},
+		"caliper:FillinBlankResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/FillinBlankResponse"
+				},
+				"values": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"values"
+			]
+		},
+		"caliper:MultipleChoiceResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/MultipleChoiceResponse"
+				},
+				"value": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"value"
+			]
+		},
+		"caliper:MultipleResponseResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/MultipleResponseResponse"
+				},
+				"values": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"values"
+			]
+		},
+		"caliper:SelectTextResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/SelectTextResponse"
+				},
+				"values": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"values"
+			]
+		},
+		"caliper:TrueFalseResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/TrueFalseResponse"
+				},
+				"value": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"value"
+			]
+		},
 
 		"caliper:Result": {},
 
@@ -993,14 +1168,14 @@
 					"$ref": "#/definitions/caliper:Entity"
 				},
 				"generated": {
-					"oneOf": [{
+					"anyOf": [{
 						"$ref": "#/definitions/caliper:Entity"
 					}, {
 						"type": "null"
 					}]
 				},
 				"target": {
-					"oneOf": [{
+					"anyOf": [{
 						"$ref": "#/definitions/caliper:Entity"
 					}, {
 						"type": "null"
@@ -1010,21 +1185,21 @@
 					"$ref": "#/definitions/NullableString"
 				},
 				"edApp": {
-					"oneOf": [{
+					"anyOf": [{
 						"$ref": "#/definitions/caliper:SoftwareApplication"
 					}, {
 						"type": "null"
 					}]
 				},
 				"group": {
-					"oneOf": [{
+					"anyOf": [{
 						"$ref": "#/definitions/w3c:Organization"
 					}, {
 						"type": "null"
 					}]
 				},
 				"membership": {
-					"oneOf": [{
+					"anyOf": [{
 						"$ref": "#/definitions/caliper:lis:Membership"
 					}, {
 						"type": "null"
@@ -1041,6 +1216,7 @@
 				"eventTime"
 			]
 		},
+
 		"caliper:SessionEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Event"
@@ -1058,6 +1234,9 @@
 						"type": "string",
 						"format": "regex",
 						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:SoftwareApplication"
 					},
 					"generated": {
 						"oneOf": [{
@@ -1082,20 +1261,16 @@
 						"format": "regex",
 						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut"
 					},
-					"generated": {
-						"oneOf": [{
-							"type": "null"
-						}, {
-							"allOf": [{
-								"$ref": "#/definitions/caliper:Session"
-							}],
-							"properties": {
-								"endedAtTime": {
-									"$ref": "#/definitions/DateTime"
-								}
-							},
-							"required": ["endedAtTime"]
-						}]
+					"object": {
+						"allOf": [{
+							"$ref": "#/definitions/caliper:Session"
+						}],
+						"properties": {
+							"endedAtTime": {
+								"$ref": "#/definitions/DateTime"
+							}
+						},
+						"required": ["endedAtTime"]
 					}
 				}
 			}, {
@@ -1105,16 +1280,21 @@
 						"format": "regex",
 						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut"
 					},
-					"generated": {
-						"oneOf": [{
-							"type": "null"
-						}, {
+					"object": {
+						"allOf": [{
 							"$ref": "#/definitions/caliper:Session"
-						}]
+						}],
+						"properties": {
+							"endedAtTime": {
+								"$ref": "#/definitions/DateTime"
+							}
+						},
+						"required": ["endedAtTime"]
 					}
 				}
 			}]
 		},
+
 		"caliper:NavigationEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Event"
@@ -1184,10 +1364,14 @@
 					"$ref": "#/definitions/caliper:DigitalResources"
 				},
 				"generated": {
-					"type": "object"
+					"$ref": "#/definitions/caliper:SearchResult"
 				}
-			}
+			},
+			"required": [
+				"generated"
+			]
 		},
+
 		"caliper:AnnotationEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Event"
@@ -1197,6 +1381,9 @@
 					"type": "string",
 					"format": "regex",
 					"pattern": "http://purl.imsglobal.org/caliper/v1/AnnotationEvent"
+				},
+				"object": {
+					"$ref": "#/definitions/caliper:DigitalResources"
 				}
 			},
 			"oneOf": [{
@@ -1243,46 +1430,12 @@
 						"$ref": "#/definitions/caliper:TagAnnotation"
 					}
 				}
-			}]
-		},
-		"caliper:AssignableEvent": {
-			"allOf": [{
-				"$ref": "#/definitions/caliper:Event"
 			}],
-			"properties": {
-				"@type": {
-					"type": "string",
-					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/AssignableEvent"
-				},
-				"action": {
-					"enum": [
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Started",
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Completed",
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Activated",
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Deactivated",
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Showed",
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Hid",
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed",
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Abandoned"
-					]
-				},
-				"object": {
-					"anyOf": [{
-						"$ref": "#/definitions/caliper:AssignableDigitalResources"
-					}, {
-						"type": "null"
-					}]
-				},
-				"generated": {
-					"anyOf": [{
-						"$ref": "#/definitions/caliper:Attempt"
-					}, {
-						"type": "null"
-					}]
-				}
-			}
+			"required": [
+				"generated"
+			]
 		},
+
 		"caliper:AssessmentEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Event"
@@ -1292,36 +1445,205 @@
 					"type": "string",
 					"format": "regex",
 					"pattern": "http://purl.imsglobal.org/caliper/v1/AssessmentEvent"
-				},
-				"action": {
-					"enum": [
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Started",
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Submitted",
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Paused",
-						"http://purl.imsglobal.org/vocab/caliper/v1/action#Restarted"
-					]
-				},
-				"object": {
-					"anyOf": [{
-						"$ref": "#/definitions/caliper:AssignableDigitalResources"
-					}, {
-						"type": "null"
-					}]
-				},
-				"generated": {
-					"anyOf": [{
-						"$ref": "#/definitions/caliper:Attempt"
-					}, {
-						"type": "null"
-					}]
 				}
-			}
+			},
+			"oneOf": [{
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Started"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:Attempt"
+					}
+				},
+				"required": [
+					"generated"
+				]
+			}, {
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Paused",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Restarted",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Submitted"
+						]
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:Attempt"
+					},
+					"target": {
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					}
+				},
+				"required": [
+					"target"
+				]
+			}]
 		},
+
 		"caliper:AssessmentItemEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Event"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent"
+				}
+			},
+			"oneOf": [{
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Started"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssessmentItem"
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:Attempt"
+					}
+				},
+				"required": [
+					"generated"
+				]
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Completed"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssessmentItem"
+					},
+					"target": {
+						"oneOf": [{
+							"type": "null"
+						}, {
+							"$ref": "#/definitions/caliper:Attempt"
+						}]
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:Responses"
+					}
+				},
+				"required": [
+					"generated"
+				]
+			}, {
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Skipped",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed"
+						]
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssessmentItem"
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:Attempt"
+					},
+					"target": {
+						"$ref": "#/definitions/caliper:AssessmentItem"
+					}
+				},
+				"required": [
+					"target"
+				]
 			}]
 		},
+
+		"caliper:AssignableEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Event"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/AssignableEvent"
+				}
+			},
+			"oneOf": [{
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Started"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:Attempt"
+					}
+				},
+				"required": [
+					"generated"
+				]
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Completed"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:Attempt"
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Activated",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Deactivated",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Showed",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Hid",
+						]
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Abandoned"
+						]
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:Attempt"
+					},
+					"target": {
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					}
+				},
+				"required": [
+					"target"
+				]
+			}]
+		},
+
 		"caliper:OutcomeEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Event"
@@ -1341,6 +1663,25 @@
 				"$ref": "#/definitions/caliper:SoftwareApplication"
 			}, {
 				"$ref": "#/definitions/caliper:Organization"
+			}]
+		},
+		"caliper:Responses": {
+			"description": "Collection of all Caliper Responses",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"anyOf": [{
+				"$ref": "#/definitions/caliper:Response"
+			}, {
+				"$ref": "#/definitions/caliper:FillinBlankResponse"
+			}, {
+				"$ref": "#/definitions/caliper:MultipleChoiceResponse"
+			}, {
+				"$ref": "#/definitions/caliper:MultipleResponseResponse"
+			}, {
+				"$ref": "#/definitions/caliper:SelectTextResponse"
+			}, {
+				"$ref": "#/definitions/caliper:TrueFalseResponse"
 			}]
 		},
 		"caliper:AssignableDigitalResources": {
@@ -1396,7 +1737,7 @@
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Event"
 			}],
-			"oneOf": [{
+			"anyOf": [{
 				"$ref": "#/definitions/caliper:SessionEvent"
 			}, {
 				"$ref": "#/definitions/caliper:NavigationEvent"
@@ -1406,6 +1747,12 @@
 				"$ref": "#/definitions/caliper:SearchedEvent"
 			}, {
 				"$ref": "#/definitions/caliper:AnnotationEvent"
+			}, {
+				"$ref": "#/definitions/caliper:AssessmentEvent"
+			}, {
+				"$ref": "#/definitions/caliper:AssessmentItemEvent"
+			}, {
+				"$ref": "#/definitions/caliper:AssignableEvent"
 			}]
 		}
 	}
