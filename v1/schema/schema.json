@@ -120,7 +120,7 @@
 			"required": [
 				"@context",
 				"@type"
-			],
+			]
 		},
 
 		"schema:Thing": {
@@ -273,7 +273,7 @@
 				},
 				"dateModified": {
 					"$ref": "#/definitions/NullableDateTime"
-				},
+				}
 			}
 		},
 		"caliper:BaseDigitalResource": {
@@ -421,7 +421,7 @@
 		"caliper:lis:Role": {
 			"allOf": [{
 				"$ref": "#/definitions/w3c:Role"
-			}],
+			}]
 		},
 		"caliper:lis:Status": {
 			"allOf": [{
@@ -865,7 +865,6 @@
 				"actor"
 			]
 		},
-
 		"caliper:Assessment": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseAssignableDigitalResource"
@@ -884,7 +883,6 @@
 				}
 			}
 		},
-
 		"caliper:AssessmentItem": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseAssignableDigitalResource"
@@ -1176,7 +1174,7 @@
 				"volumeLevel": {
 					"$ref": "#/definitions/NullableString"
 				},
-				"volumeMin": {
+				"muted": {
 					"type": ["boolean", "null"]
 				}
 			}
@@ -1279,7 +1277,6 @@
 				"eventTime"
 			]
 		},
-
 		"caliper:Event": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseEvent"
@@ -1290,9 +1287,8 @@
 					"format": "regex",
 					"pattern": "http://purl.imsglobal.org/caliper/v1/Event"
 				}
-			},
+			}
 		},
-
 		"caliper:SessionEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseEvent"
@@ -1370,7 +1366,6 @@
 				}
 			}]
 		},
-
 		"caliper:NavigationEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseEvent"
@@ -1447,7 +1442,6 @@
 				"generated"
 			]
 		},
-
 		"caliper:AnnotationEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseEvent"
@@ -1511,7 +1505,6 @@
 				"generated"
 			]
 		},
-
 		"caliper:AssessmentEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseEvent"
@@ -1561,7 +1554,6 @@
 				]
 			}]
 		},
-
 		"caliper:AssessmentItemEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseEvent"
@@ -1645,7 +1637,6 @@
 				]
 			}]
 		},
-
 		"caliper:AssignableEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseEvent"
@@ -1692,7 +1683,7 @@
 							"http://purl.imsglobal.org/vocab/caliper/v1/action#Activated",
 							"http://purl.imsglobal.org/vocab/caliper/v1/action#Deactivated",
 							"http://purl.imsglobal.org/vocab/caliper/v1/action#Showed",
-							"http://purl.imsglobal.org/vocab/caliper/v1/action#Hid",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Hid"
 						]
 					},
 					"object": {
@@ -1719,7 +1710,6 @@
 				]
 			}]
 		},
-
 		"caliper:OutcomeEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseEvent"
@@ -1750,7 +1740,6 @@
 				"generated"
 			]
 		},
-
 		"caliper:MediaEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseEvent"
