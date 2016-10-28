@@ -1051,7 +1051,67 @@
 			]
 		},
 
-		"caliper:Result": {},
+		"caliper:Result": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/Result"
+				},
+
+				"assignable": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"actor": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Agents"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"normalScore": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"penaltyScore": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"extraCreditScore": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"totalScore": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"curvedTotalScore": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"curveFactor": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"comment": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"scoredBy": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Agents"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				}
+			},
+			"required": [
+				"scoredBy"
+			]
+		},
 
 		"caliper:MediaLocation": {
 			"allOf": [{
@@ -1647,8 +1707,34 @@
 		"caliper:OutcomeEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Event"
-			}]
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/OutcomeEvent"
+				},
+				"action": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Graded"
+				},
+				"object": {
+					"$ref": "#/definitions/caliper:Attempt"
+				},
+				"target": {
+					"$ref": "#/definitions/caliper:AssignableDigitalResources"
+				},
+				"generated": {
+					"$ref": "#/definitions/caliper:Result"
+				}
+			},
+			"required": [
+				"target",
+				"generated"
+			]
 		},
+
 		"caliper:MediaEvent": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Event"
@@ -1753,6 +1839,8 @@
 				"$ref": "#/definitions/caliper:AssessmentItemEvent"
 			}, {
 				"$ref": "#/definitions/caliper:AssignableEvent"
+			}, {
+				"$ref": "#/definitions/caliper:OutcomeEvent"
 			}]
 		}
 	}
