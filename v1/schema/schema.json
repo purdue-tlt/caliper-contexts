@@ -430,7 +430,70 @@
 		"caliper:lis:Role": {
 			"allOf": [{
 				"$ref": "#/definitions/w3c:Role"
-			}]
+			}],
+			"enum": [
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Learner",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#ExternalLearner",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#GuestLearner",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#Instructor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#Learner",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#NonCreditLearner",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#ExternalInstructor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#GuestInstructor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#Lecturer",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#PrimaryInstructor",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Administrator",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Administrator",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Developer",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Support",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#SystemAdministrator",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalSupport",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalDeveloper",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalSystemAdministrator",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#ContentDeveloper",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ContentDeveloper",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#Librarian",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ContentExpert",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ExternalContentExpert",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Manager",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#AreaManager",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#CourseCoordinator",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#Observer",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#ExternalObserver",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Member",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Member#Member",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Mentor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Mentor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Advisor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Auditor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Reviewer",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Tutor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#LearningFacilitator",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalMentor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalAdvisor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalAuditor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalReviewer",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalTutor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor/ExternalLearningFacilitator",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#TeachingAssistant",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistant",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#Grader",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantSection",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantSectionAssociation",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantOffering",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantTemplate",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantGroup"
+			]
 		},
 		"caliper:lis:Status": {
 			"allOf": [{
@@ -1895,6 +1958,55 @@
 				"$ref": "#/definitions/caliper:Reading"
 			}, {
 				"$ref": "#/definitions/caliper:WebPage"
+			}]
+		},
+		"caliper:Entities": {
+			"description": "Collection of all Caliper Entities",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"anyOf": [{
+				"$ref": "#/definitions/caliper:Agents"
+			}, {
+				"$ref": "#/definitions/caliper:MediaObjects"
+			}, {
+				"$ref": "#/definitions/caliper:Responses"
+			}, {
+				"$ref": "#/definitions/caliper:DigitalResources"
+			}, {
+				"$ref": "#/definitions/caliper:MediaLocation"
+			}, {
+				"$ref": "#/definitions/caliper:Session"
+			}, {
+				"$ref": "#/definitions/caliper:Attempt"
+			}, {
+				"$ref": "#/definitions/caliper:Result"
+			}, {
+				"$ref": "#/definitions/caliper:Annotation"
+			}, {
+				"$ref": "#/definitions/caliper:BookmarkAnnotation"
+			}, {
+				"$ref": "#/definitions/caliper:HighlightAnnotation"
+			}, {
+				"$ref": "#/definitions/caliper:SharedAnnotation"
+			}, {
+				"$ref": "#/definitions/caliper:TagAnnotation"
+			}, {
+				"$ref": "#/definitions/caliper:SearchResult"
+			}, {
+				"$ref": "#/definitions/caliper:lis:Group"
+			}, {
+				"$ref": "#/definitions/caliper:lis:Role"
+			}, {
+				"$ref": "#/definitions/caliper:lis:Status"
+			}, {
+				"$ref": "#/definitions/caliper:lis:Membership"
+			}, {
+				"$ref": "#/definitions/caliper:lis:CourseOffering"
+			}, {
+				"$ref": "#/definitions/caliper:lis:CourseSection"
+			}, {
+				"$ref": "#/definitions/caliper:LearningObjective"
 			}]
 		},
 		"caliper:Events": {
