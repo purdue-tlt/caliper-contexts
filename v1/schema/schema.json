@@ -1,8 +1,8 @@
 {
-	"title": "JSON Schema for IMS Global Caliper",
+	"title": "JSON Schema for IMS Caliper Analytics™",
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
-	"description": "JSON Schema for Caliper v1",
+	"description": "JSON Schema for IMS Caliper Analytics™ v1. Describes an entire event store payload.",
 	"version": "1",
 	"properties": {
 		"sensor": {
@@ -73,7 +73,16 @@
 			}]
 		},
 		"Duration": {
-			"$ref": "#/definitions/NullableString"
+			"description": "xsd:duration",
+			"type": "string",
+			"pattern": "^-?(?=P.+)P(?:(?=.*[YMD])(\\d+Y)?(\\d+M)?(\\d+D)?)?(?:(?=T.+)T(?=.*[HMS])(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
+		},
+		"NullableDuration": {
+			"oneOf": [{
+				"$ref": "#/definitions/Duration"
+			}, {
+				"type": "null"
+			}]
 		},
 
 		"JsonLdContext": {
@@ -523,7 +532,7 @@
 					"$ref": "#/definitions/NullableDateTime"
 				},
 				"duration": {
-					"$ref": "#/definitions/Duration"
+					"$ref": "#/definitions/NullableDuration"
 				}
 			}
 		},
@@ -635,7 +644,7 @@
 					"$ref": "#/definitions/NullableNumber"
 				},
 				"duration": {
-					"$ref": "#/definitions/Duration"
+					"$ref": "#/definitions/NullableDuration"
 				}
 			}
 		},
@@ -858,7 +867,7 @@
 					"$ref": "#/definitions/NullableDateTime"
 				},
 				"duration": {
-					"$ref": "#/definitions/Duration"
+					"$ref": "#/definitions/NullableDuration"
 				}
 			},
 			"required": [
@@ -930,7 +939,7 @@
 					"$ref": "#/definitions/NullableDateTime"
 				},
 				"duration": {
-					"$ref": "#/definitions/Duration"
+					"$ref": "#/definitions/NullableDuration"
 				}
 			}
 		},
