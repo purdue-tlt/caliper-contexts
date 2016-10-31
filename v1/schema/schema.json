@@ -2,7 +2,7 @@
 	"title": "JSON Schema for IMS Caliper Analytics™",
 	"$schema": "http://json-schema.org/draft-04/schema#",
 	"type": "object",
-	"description": "JSON Schema for IMS Caliper Analytics™ v1. Describes an entire event store payload.",
+	"description": "JSON Schema for IMS Caliper Analytics™ v1. Defines an entire event store payload.",
 	"version": "1",
 	"properties": {
 		"sensor": {
@@ -11,15 +11,31 @@
 		},
 		"sendTime": {
 			"$ref": "#/definitions/DateTime"
-		},
-		"data": {
-			"type": "array",
-			"minItems": 1,
-			"items": {
-				"$ref": "#/definitions/caliper:Events"
-			}
 		}
 	},
+	"oneOf": [{
+		"description": "An event store payload containing Caliper Events, for validating Sensor API event payloads.",
+		"properties": {
+			"data": {
+				"type": "array",
+				"minItems": 1,
+				"items": {
+					"$ref": "#/definitions/caliper:Events"
+				}
+			}
+		}
+	}, {
+		"description": "An event store payload containing Caliper Entities, for validating Sensor API DESCRIBE method payloads.",
+		"properties": {
+			"data": {
+				"type": "array",
+				"minItems": 1,
+				"items": {
+					"$ref": "#/definitions/caliper:Entities"
+				}
+			}
+		}
+	}],
 	"required": [
 		"sensor",
 		"sendTime",
@@ -44,26 +60,10 @@
 				"null"
 			]
 		},
-		"ISODateTime": {
+		"DateTime": {
 			"description": "ISO 8601 date format string yyyy-MM-dd'T'HH:mm:ss.SSS with optional .SSS milliseconds",
 			"type": "string",
 			"pattern": "^\\d{4}-[01]\\d-[0-3]\\d(T[0-2]\\d:[0-5]\\d(:[0-5]\\d)?([\\.,]\\d{1,3})?(Z|[+-][0-2]\\d(:?[0-5]\\d)?)?)?$"
-		},
-		"UNIXTimeStamp": {
-			"description": "10-digit UNIX timestamp, epoch time",
-			"type": "integer",
-			"minimum": 0,
-			"maximum": 9999999999
-		},
-		"DateTime": {
-			"anyOf": [{
-				"$ref": "#/definitions/ISODateTime"
-			}, {
-				"$ref": "#/definitions/UNIXTimeStamp"
-			}, {
-				"type": "string",
-				"format": "date-time"
-			}]
 		},
 		"NullableDateTime": {
 			"oneOf": [{
@@ -73,7 +73,7 @@
 			}]
 		},
 		"Duration": {
-			"description": "xsd:duration",
+			"description": "xsd:duration format string PnYnMnDTnHnMnS",
 			"type": "string",
 			"pattern": "^-?(?=P.+)P(?:(?=.*[YMD])(\\d+Y)?(\\d+M)?(\\d+D)?)?(?:(?=T.+)T(?=.*[HMS])(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
 		},
@@ -124,12 +124,12 @@
 				},
 				"@type": {
 					"$ref": "#/definitions/JsonLdType"
+				},
+				"@id": {
+					"type": "string",
+					"format": "uri"
 				}
-			},
-			"required": [
-				"@context",
-				"@type"
-			]
+			}
 		},
 
 		"schema:Thing": {
@@ -266,24 +266,31 @@
 				"$ref": "#/definitions/schema:Thing"
 			}, {
 				"$ref": "#/definitions/caliper:Object"
-			}],
-			"properties": {
-				"name": {
-					"$ref": "#/definitions/NullableString"
+			}, {
+				"properties": {
+					"name": {
+						"$ref": "#/definitions/NullableString"
+					},
+					"description": {
+						"$ref": "#/definitions/NullableString"
+					},
+					"extensions": {
+						"type": [
+							"object",
+							"null"
+						]
+					},
+					"dateCreated": {
+						"$ref": "#/definitions/NullableDateTime"
+					},
+					"dateModified": {
+						"$ref": "#/definitions/NullableDateTime"
+					}
 				},
-				"description": {
-					"$ref": "#/definitions/NullableString"
-				},
-				"extensions": {
-					"type": "object"
-				},
-				"dateCreated": {
-					"$ref": "#/definitions/NullableDateTime"
-				},
-				"dateModified": {
-					"$ref": "#/definitions/NullableDateTime"
-				}
-			}
+				"required": [
+					"@id"
+				]
+			}]
 		},
 		"caliper:BaseDigitalResource": {
 			"description": "Caliper representation of a CreativeWork (https://schema.org/CreativeWork)",
@@ -325,7 +332,10 @@
 				"version": {
 					"$ref": "#/definitions/NullableString"
 				}
-			}
+			},
+			"required": [
+				"@id"
+			]
 		},
 		"caliper:DigitalResource": {
 			"allOf": [{
@@ -560,13 +570,21 @@
 		"caliper:lis:CourseSection": {
 			"description": "A CourseSection is a way to represent a group of people associated with a course or class. These groups may include everyone in the class or course, or may be subsets of that whole group. CourseSections may have sub-sections (these are created as separate Group objects linked using the relationship). Examples of a CourseSection are Lecture, Laboratory, Studio, Seminar, etc. There may be several instances of a type of CourseSection e.g., multiple lectures. A Caliper CourseSection provides a subset of the CourseSection properties specified in the IMS LTI 2.0 specification, which in turn, draws inspiration from the IMS LIS 1.0 specification.",
 			"allOf": [{
-				"$ref": "#/definitions/caliper:lis:CourseOffering"
+				"$ref": "#/definitions/w3c:Organization"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
 			}],
 			"properties": {
 				"@type": {
 					"type": "string",
 					"format": "regex",
 					"pattern": "http://purl.imsglobal.org/caliper/v1/lis/CourseSection"
+				},
+				"courseNumber": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"academicSession": {
+					"$ref": "#/definitions/NullableString"
 				},
 				"category": {
 					"$ref": "#/definitions/NullableString"
@@ -1870,7 +1888,12 @@
 
 		"caliper:Agents": {
 			"description": "Collection of all Caliper Agents",
-			"anyOf": [{
+			"allOf": [{
+				"$ref": "#/definitions/foaf:Agent"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"oneOf": [{
 				"$ref": "#/definitions/caliper:lis:Person"
 			}, {
 				"$ref": "#/definitions/caliper:SoftwareApplication"
@@ -1883,7 +1906,7 @@
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseMediaObject"
 			}],
-			"anyOf": [{
+			"oneOf": [{
 				"$ref": "#/definitions/caliper:MediaObject"
 			}, {
 				"$ref": "#/definitions/caliper:AudioObject"
@@ -1898,7 +1921,7 @@
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseResponse"
 			}],
-			"anyOf": [{
+			"oneOf": [{
 				"$ref": "#/definitions/caliper:Response"
 			}, {
 				"$ref": "#/definitions/caliper:FillinBlankResponse"
@@ -1917,7 +1940,7 @@
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseAssignableDigitalResource"
 			}],
-			"anyOf": [{
+			"oneOf": [{
 				"$ref": "#/definitions/caliper:AssignableDigitalResource"
 			}, {
 				"$ref": "#/definitions/caliper:Assessment"
@@ -1930,7 +1953,7 @@
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseDigitalResource"
 			}],
-			"anyOf": [{
+			"oneOf": [{
 				"$ref": "#/definitions/caliper:DigitalResource"
 			}, {
 				"$ref": "#/definitions/caliper:AssignableDigitalResources"
@@ -1965,7 +1988,7 @@
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Entity"
 			}],
-			"anyOf": [{
+			"oneOf": [{
 				"$ref": "#/definitions/caliper:Agents"
 			}, {
 				"$ref": "#/definitions/caliper:MediaObjects"
@@ -2014,7 +2037,7 @@
 			"allOf": [{
 				"$ref": "#/definitions/caliper:BaseEvent"
 			}],
-			"anyOf": [{
+			"oneOf": [{
 				"$ref": "#/definitions/caliper:Event"
 			}, {
 				"$ref": "#/definitions/caliper:SessionEvent"
