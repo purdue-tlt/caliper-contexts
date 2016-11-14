@@ -297,7 +297,7 @@
 			"allOf": [{
 				"$ref": "#/definitions/schema:CreativeWork"
 			}, {
-				"$ref": "#/definitions/caliper:Object"
+				"$ref": "#/definitions/caliper:Entity"
 			}],
 			"properties": {
 				"objectType": {
@@ -732,7 +732,14 @@
 		"caliper:SearchResult": {
 			"allOf": [{
 				"$ref": "#/definitions/caliper:Entity"
-			}]
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "http://purl.imsglobal.org/caliper/v1/SearchResult"
+				}
+			}
 		},
 
 		"caliper:BaseAnnotation": {
@@ -1344,14 +1351,14 @@
 				},
 				"group": {
 					"anyOf": [{
-						"$ref": "#/definitions/w3c:Organization"
+						"$ref": "#/definitions/caliper:Organizations"
 					}, {
 						"type": "null"
 					}]
 				},
 				"membership": {
 					"anyOf": [{
-						"$ref": "#/definitions/caliper:lis:Membership"
+						"$ref": "#/definitions/caliper:Memberships"
 					}, {
 						"type": "null"
 					}]
@@ -1361,6 +1368,7 @@
 				}
 			},
 			"required": [
+				"@context",
 				"actor",
 				"action",
 				"object",
@@ -1901,6 +1909,34 @@
 				"$ref": "#/definitions/caliper:Organization"
 			}]
 		},
+		"caliper:Organizations": {
+			"description": "Collection of all Caliper Organizations",
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Organization"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:Organization"
+			}, {
+				"$ref": "#/definitions/caliper:lis:CourseOffering"
+			}, {
+				"$ref": "#/definitions/caliper:lis:CourseSection"
+			}, {
+				"$ref": "#/definitions/caliper:lis:Group"
+			}]
+		},
+		"caliper:Memberships": {
+			"description": "Collection of all Caliper Memberships",
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Membership"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:lis:Membership"
+			}]
+		},
 		"caliper:MediaObjects": {
 			"description": "Collection of all Caliper MediaObjects",
 			"allOf": [{
@@ -1991,13 +2027,9 @@
 			"oneOf": [{
 				"$ref": "#/definitions/caliper:Agents"
 			}, {
-				"$ref": "#/definitions/caliper:MediaObjects"
-			}, {
 				"$ref": "#/definitions/caliper:Responses"
 			}, {
 				"$ref": "#/definitions/caliper:DigitalResources"
-			}, {
-				"$ref": "#/definitions/caliper:MediaLocation"
 			}, {
 				"$ref": "#/definitions/caliper:Session"
 			}, {

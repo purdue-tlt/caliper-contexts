@@ -11,3 +11,30 @@ See the JSON-LD specification for more information on the JSON-LD concept of the
 Trademark Information- http://www.imsglobal.org/copyright.html
 
 For license information contact, info@imsglobal.org and read the license file contained in the repository.
+
+## Validation
+
+Validation of Caliper EventStore payloads is provided using the Caliper [JSON Schema](http://json-schema.org/) document.
+
+### Tests
+
+Unit tests for the Caliper JSON Schema are located in the `test` folder. The tests depend on the [caliper-common-fixtures-public](https://github.com/IMSGlobal/caliper-common-fixtures-public) project, which contains reference Caliper JSON documents. To run the tests follow these steps.
+
+Restore the [caliper-common-fixtures-public](https://github.com/IMSGlobal/caliper-common-fixtures-public) submodule
+```
+git submodule update --init
+```
+
+Install dependencies using npm
+```
+npm install
+```
+Or using [yarn](https://github.com/yarnpkg/yarn)
+```
+npm install -g yarn
+yarn
+```
+And run the tests
+```
+npm test
+```

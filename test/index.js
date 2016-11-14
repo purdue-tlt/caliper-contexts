@@ -1,33 +1,63 @@
 const expect = require('chai').expect;
 const Ajv = require('ajv');
-const ajv = new Ajv({
-	//allErrors: true
-});
+const ajv = new Ajv({allErrors: false});
+const _ = require('lodash');
 const utils = require('../lib/utils');
 const schema = require('../lib/schema');
-const events = require('../lib/events');
+const fixtures = require('../lib/fixtures');
 
-function eventTest(key, event) {
-	describe(key + ' event', function () {
+function validate(data) {
+	return ajv.validate(schema, utils.createEventStorePayload(data));
+}
+
+function invalidTest(testName, event) {
+	it(testName, function * () {
+		expect(validate([event])).to.be.false;
+	});
+}
+
+function eventTests(name, event) {
+	describe(name + ' event', function () {
 		it('default is valid', function * () {
-			var valid = ajv.validate(schema, utils.createEventStorePayload([event]));
-			//console.error(ajv.errorsText());
+			expect(validate([event])).to.be.true;
+		});
+		if (fixtures.invalidEventsByName.hasOwnProperty(name)) {
+			describe('invalid tests', function () {
+				const invalidEvents = fixtures.invalidEventsByName[name];
+				for (var testName in invalidEvents) {
+					if (invalidEvents.hasOwnProperty(testName)) {
+						invalidTest(testName, invalidEvents[testName]);
+					}
+				}
+			});
+		}
+	});
+}
+
+describe('events', function () {
+	it('all events payload is valid', function * () {
+		expect(validate(fixtures.events)).to.be.true;
+	});
+
+	for (var name in fixtures.eventsByName) {
+		if (fixtures.eventsByName.hasOwnProperty(name)) {
+			eventTests(name, fixtures.eventsByName[name]);
+		}
+	}
+});
+
+describe('entities', function () {
+	it('all entities payload is valid', function * () {
+		expect(validate(fixtures.entities)).to.be.true;
+	});
+	for (var i = 0; i < fixtures.entities.length; i++) {
+		const entity = fixtures.entities[i];
+		it('entity is valid', function * () {
+			const valid = validate([entity]);
+			if (!valid) {
+				console.log(entity);
+			}
 			expect(valid).to.be.true;
 		});
-	});
-}
-
-for (var key in events) {
-	if (events.hasOwnProperty(key)) {
-		eventTest(key, events[key]);
 	}
-}
-
-describe('all events in payload', function () {
-	it('is valid', function * () {
-		var allEvents = Object.keys(events).map(key => events[key]);
-		var valid = ajv.validate(schema, utils.createEventStorePayload(allEvents));
-		//console.error(ajv.errorsText());
-		expect(valid).to.be.true;
-	});
 });
