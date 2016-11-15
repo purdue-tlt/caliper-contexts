@@ -117,8 +117,8 @@ describe('event store payload', function() {
 function validatePayload(payload, expected) {
 	const valid = ajv.validate(schema, payload);
 	if (valid !== expected) {
-		console.log(JSON.stringify(payload, null, 2));
-		console.log(JSON.stringify(ajv.errors, null, 2));
+		console.log('payload', JSON.stringify(payload, null, 2));
+		console.log('errors', JSON.stringify(ajv.errors, null, 2));
 	}
 	return valid;
 }
