@@ -247,7 +247,7 @@
 			}],
 			"type": "string",
 			"format": "regex",
-			"pattern": "http://purl.imsglobal.org/ctx/caliper/v1/Context"
+			"pattern": "^http://purl.imsglobal.org/ctx/caliper/v1/Context$"
 		},
 		"caliper:Object": {
 			"description": "Base Caliper object, with caliper:Context",
@@ -345,7 +345,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/DigitalResource"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/DigitalResource$"
 				}
 			}
 		},
@@ -357,7 +357,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/LearningObjective"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/LearningObjective$"
 				}
 			}
 		},
@@ -369,7 +369,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/WebPage"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/WebPage$"
 				}
 			}
 		},
@@ -386,7 +386,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/SoftwareApplication"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SoftwareApplication$"
 				}
 			}
 		},
@@ -403,7 +403,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/lis/Organization"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/Organization$"
 				}
 			}
 		},
@@ -418,7 +418,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/lis/Person"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/Person$"
 				}
 			}
 		},
@@ -433,7 +433,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/lis/Group"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/Group$"
 				}
 			}
 		},
@@ -526,7 +526,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/lis/Membership"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/Membership$"
 				},
 				"member": {
 					"oneOf": [{
@@ -557,7 +557,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/lis/CourseOffering"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/CourseOffering$"
 				},
 				"courseNumber": {
 					"$ref": "#/definitions/NullableString"
@@ -578,7 +578,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/lis/CourseSection"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/CourseSection$"
 				},
 				"courseNumber": {
 					"$ref": "#/definitions/NullableString"
@@ -601,7 +601,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/Session"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Session$"
 				},
 				"actor": {
 					"$ref": "#/definitions/caliper:Agents"
@@ -626,7 +626,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://www.idpf.org/epub/vocab/structure/#chapter"
+					"pattern": "^http://www.idpf.org/epub/vocab/structure/#chapter$"
 				}
 			}
 		},
@@ -638,7 +638,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://www.idpf.org/epub/vocab/structure/#part"
+					"pattern": "^http://www.idpf.org/epub/vocab/structure/#part$"
 				}
 			}
 		},
@@ -650,7 +650,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://www.idpf.org/epub/vocab/structure/#subchapter"
+					"pattern": "^http://www.idpf.org/epub/vocab/structure/#subchapter$"
 				}
 			}
 		},
@@ -662,7 +662,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://www.idpf.org/epub/vocab/structure/#volume"
+					"pattern": "^http://www.idpf.org/epub/vocab/structure/#volume$"
 				}
 			}
 		},
@@ -674,7 +674,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/Frame"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Frame$"
 				},
 				"index": {
 					"$ref": "#/definitions/NullableNumber"
@@ -689,7 +689,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/Reading"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Reading$"
 				},
 				"learningResourceType": {
 					"$ref": "#/definitions/NullableString"
@@ -710,7 +710,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/View"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/View$"
 				},
 				"frame": {
 					"$ref": "#/definitions/caliper:Frame"
@@ -737,7 +737,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/SearchResult"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SearchResult$"
 				}
 			}
 		},
@@ -768,7 +768,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/Annotation"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Annotation$"
 				}
 			}
 		},
@@ -780,7 +780,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation$"
 				},
 				"bookmarkNotes": {
 					"$ref": "#/definitions/NullableString"
@@ -795,7 +795,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/HighlightAnnotation"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/HighlightAnnotation$"
 				},
 				"selection": {
 					"type": "object",
@@ -829,7 +829,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/SharedAnnotation"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SharedAnnotation$"
 				},
 				"withAgents": {
 					"type": "array",
@@ -855,7 +855,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/TagAnnotation"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/TagAnnotation$"
 				},
 				"tags": {
 					"type": "array",
@@ -915,7 +915,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/AssignableDigitalResource"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AssignableDigitalResource$"
 				}
 			}
 		},
@@ -927,7 +927,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/Attempt"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Attempt$"
 				},
 				"actor": {
 					"anyOf": [{
@@ -970,7 +970,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/Assessment"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Assessment$"
 				},
 				"assessmentItems": {
 					"type": "array",
@@ -988,7 +988,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/AssessmentItem"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AssessmentItem$"
 				},
 				"isTimeDependent": {
 					"type": "boolean"
@@ -1039,7 +1039,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/Response"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Response$"
 				}
 			}
 		},
@@ -1051,7 +1051,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/FillinBlankResponse"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/FillinBlankResponse$"
 				},
 				"values": {
 					"type": "array",
@@ -1073,7 +1073,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/MultipleChoiceResponse"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/MultipleChoiceResponse$"
 				},
 				"value": {
 					"type": "string"
@@ -1091,7 +1091,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/MultipleResponseResponse"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/MultipleResponseResponse$"
 				},
 				"values": {
 					"type": "array",
@@ -1113,7 +1113,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/SelectTextResponse"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SelectTextResponse$"
 				},
 				"values": {
 					"type": "array",
@@ -1135,7 +1135,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/TrueFalseResponse"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/TrueFalseResponse$"
 				},
 				"value": {
 					"type": "string"
@@ -1154,7 +1154,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/Result"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Result$"
 				},
 
 				"assignable": {
@@ -1216,7 +1216,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/MediaLocation"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/MediaLocation$"
 				},
 				"currentTime": {
 					"type": "number"
@@ -1246,7 +1246,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/MediaObject"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/MediaObject$"
 				}
 			}
 		},
@@ -1260,7 +1260,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/AudioObject"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AudioObject$"
 				},
 				"volumeMin": {
 					"$ref": "#/definitions/NullableString"
@@ -1286,7 +1286,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/ImageObject"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/ImageObject$"
 				}
 			}
 		},
@@ -1300,7 +1300,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/VideoObject"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/VideoObject$"
 				}
 			}
 		},
@@ -1383,7 +1383,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/Event"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Event$"
 				}
 			}
 		},
@@ -1395,7 +1395,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/SessionEvent"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SessionEvent$"
 				}
 			},
 			"oneOf": [{
@@ -1403,7 +1403,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn$"
 					},
 					"object": {
 						"$ref": "#/definitions/caliper:SoftwareApplication"
@@ -1429,7 +1429,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut$"
 					},
 					"object": {
 						"allOf": [{
@@ -1448,7 +1448,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut$"
 					},
 					"object": {
 						"allOf": [{
@@ -1472,12 +1472,12 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/NavigationEvent"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/NavigationEvent$"
 				},
 				"action": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo"
+					"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo$"
 				},
 				"object": {
 					"$ref": "#/definitions/caliper:DigitalResources"
@@ -1502,12 +1502,12 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/ViewEvent"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/ViewEvent$"
 				},
 				"action": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed"
+					"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed$"
 				},
 				"object": {
 					"$ref": "#/definitions/caliper:DigitalResources"
@@ -1522,12 +1522,12 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/SearchedEvent"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SearchedEvent$"
 				},
 				"action": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Searched"
+					"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Searched$"
 				},
 				"object": {
 					"$ref": "#/definitions/caliper:DigitalResources"
@@ -1548,7 +1548,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/AnnotationEvent"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AnnotationEvent$"
 				},
 				"object": {
 					"$ref": "#/definitions/caliper:DigitalResources"
@@ -1559,7 +1559,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Bookmarked"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Bookmarked$"
 					},
 					"generated": {
 						"$ref": "#/definitions/caliper:BookmarkAnnotation"
@@ -1570,7 +1570,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Highlighted"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Highlighted$"
 					},
 					"generated": {
 						"$ref": "#/definitions/caliper:HighlightAnnotation"
@@ -1581,7 +1581,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Shared"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Shared$"
 					},
 					"generated": {
 						"$ref": "#/definitions/caliper:SharedAnnotation"
@@ -1592,7 +1592,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Tagged"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Tagged$"
 					},
 					"generated": {
 						"$ref": "#/definitions/caliper:TagAnnotation"
@@ -1611,7 +1611,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/AssessmentEvent"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AssessmentEvent$"
 				}
 			},
 			"oneOf": [{
@@ -1619,7 +1619,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Started"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Started$"
 					},
 					"object": {
 						"$ref": "#/definitions/caliper:AssignableDigitalResources"
@@ -1660,7 +1660,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent$"
 				}
 			},
 			"oneOf": [{
@@ -1668,7 +1668,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Started"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Started$"
 					},
 					"object": {
 						"$ref": "#/definitions/caliper:AssessmentItem"
@@ -1685,7 +1685,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Completed"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Completed$"
 					},
 					"object": {
 						"$ref": "#/definitions/caliper:AssessmentItem"
@@ -1721,7 +1721,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed$"
 					},
 					"object": {
 						"$ref": "#/definitions/caliper:Attempt"
@@ -1743,7 +1743,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/AssignableEvent"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AssignableEvent$"
 				}
 			},
 			"oneOf": [{
@@ -1751,7 +1751,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Started"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Started$"
 					},
 					"object": {
 						"$ref": "#/definitions/caliper:AssignableDigitalResources"
@@ -1768,7 +1768,7 @@
 					"action": {
 						"type": "string",
 						"format": "regex",
-						"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Completed"
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Completed$"
 					},
 					"object": {
 						"$ref": "#/definitions/caliper:Attempt"
@@ -1816,12 +1816,12 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/OutcomeEvent"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/OutcomeEvent$"
 				},
 				"action": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/vocab/caliper/v1/action#Graded"
+					"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Graded$"
 				},
 				"object": {
 					"$ref": "#/definitions/caliper:Attempt"
@@ -1846,7 +1846,7 @@
 				"@type": {
 					"type": "string",
 					"format": "regex",
-					"pattern": "http://purl.imsglobal.org/caliper/v1/MediaEvent"
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/MediaEvent$"
 				},
 				"object": {
 					"$ref": "#/definitions/caliper:MediaObjects"
