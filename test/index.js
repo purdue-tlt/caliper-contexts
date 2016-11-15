@@ -21,12 +21,12 @@ function eventTests(name, event) {
 		it('default is valid', function * () {
 			expect(validate([event])).to.be.true;
 		});
-		if (fixtures.invalidEventsByName.hasOwnProperty(name)) {
+		if (fixtures.invalidEventTestsByName.hasOwnProperty(name)) {
 			describe('invalid tests', function () {
-				const invalidEvents = fixtures.invalidEventsByName[name];
-				for (var testName in invalidEvents) {
-					if (invalidEvents.hasOwnProperty(testName)) {
-						invalidTest(testName, invalidEvents[testName]);
+				const invalidEventTests = fixtures.invalidEventTestsByName[name];
+				for (var testName in invalidEventTests) {
+					if (invalidEventTests.hasOwnProperty(testName)) {
+						invalidTest(testName, invalidEventTests[testName]);
 					}
 				}
 			});
@@ -52,12 +52,24 @@ describe('entities', function () {
 	});
 	for (var i = 0; i < fixtures.entities.length; i++) {
 		const entity = fixtures.entities[i];
-		it('entity is valid', function * () {
+		it(`entity of @type="${entity['@type']}" is valid`, function * () {
 			const valid = validate([entity]);
 			if (!valid) {
-				console.log(entity);
+				console.log(JSON.stringify(entity, null, 2));
+				console.log(JSON.stringify(ajv.errors, null, 2));
 			}
 			expect(valid).to.be.true;
 		});
 	}
+	// for (var i = 0; i < fixtures.invalidEntities.length; i++) {
+	// 	const entity = fixtures.invalidEntities[i];
+	// 	it('entity is invalid', function * () {
+	// 		const valid = validate([entity]);
+	// 		if (valid) {
+	// 			console.log(JSON.stringify(entity, null, 2));
+	// 			console.log(JSON.stringify(ajv.errors, null, 2));
+	// 		}
+	// 		expect(valid).to.be.false;
+	// 	});
+	// }
 });
