@@ -1,0 +1,19 @@
+{
+  "name": "caliper-schema-tests",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test-unit",
+    "test-unit": "NODE_ENV=test mocha --require co-mocha 'test/*.js'"
+  },
+  "devDependencies": {
+    "ajv": "^4.8.2",
+    "chai": "3.5.0",
+    "co-mocha": "1.1.3",
+    "lodash": "^4.17.0",
+    "mocha": "3.1.2",
+    "sinon": "1.17.6",
+    "sinon-chai": "2.8.0"
+  }
+}
