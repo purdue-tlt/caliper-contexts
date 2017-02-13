@@ -1,0 +1,2097 @@
+{
+	"title": "JSON Schema for IMS Caliper Analytics™",
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"description": "JSON Schema for IMS Caliper Analytics™ v1. Defines an entire event store payload.",
+	"version": "1",
+	"properties": {
+		"sensor": {
+			"type": "string",
+			"format": "uri"
+		},
+		"sendTime": {
+			"$ref": "#/definitions/DateTime"
+		}
+	},
+	"oneOf": [{
+		"description": "An event store payload containing Caliper Events, for validating Sensor API event payloads.",
+		"properties": {
+			"data": {
+				"type": "array",
+				"minItems": 1,
+				"items": {
+					"$ref": "#/definitions/caliper:Events"
+				}
+			}
+		}
+	}, {
+		"description": "An event store payload containing Caliper Entities, for validating Sensor API DESCRIBE method payloads.",
+		"properties": {
+			"data": {
+				"type": "array",
+				"minItems": 1,
+				"items": {
+					"$ref": "#/definitions/caliper:Entities"
+				}
+			}
+		}
+	}],
+	"required": [
+		"sensor",
+		"sendTime",
+		"data"
+	],
+	"definitions": {
+		"NullableNumber": {
+			"type": [
+				"number",
+				"null"
+			]
+		},
+		"NullableInteger": {
+			"type": [
+				"integer",
+				"null"
+			]
+		},
+		"NullableString": {
+			"type": [
+				"string",
+				"null"
+			]
+		},
+		"DateTime": {
+			"description": "ISO 8601 date format string yyyy-MM-dd'T'HH:mm:ss.SSS with optional .SSS milliseconds",
+			"type": "string",
+			"pattern": "^\\d{4}-[01]\\d-[0-3]\\d(T[0-2]\\d:[0-5]\\d(:[0-5]\\d)?([\\.,]\\d{1,3})?(Z|[+-][0-2]\\d(:?[0-5]\\d)?)?)?$"
+		},
+		"NullableDateTime": {
+			"oneOf": [{
+				"$ref": "#/definitions/DateTime"
+			}, {
+				"type": "null"
+			}]
+		},
+		"Duration": {
+			"description": "xsd:duration format string PnYnMnDTnHnMnS",
+			"type": "string",
+			"pattern": "^-?(?=P.+)P(?:(?=.*[YMD])(\\d+Y)?(\\d+M)?(\\d+D)?)?(?:(?=T.+)T(?=.*[HMS])(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"
+		},
+		"NullableDuration": {
+			"oneOf": [{
+				"$ref": "#/definitions/Duration"
+			}, {
+				"type": "null"
+			}]
+		},
+
+		"JsonLdContext": {
+			"description": "A link to a valid JSON-LD context file, that maps term names to contexts.",
+			"oneOf": [{
+				"type": "string",
+				"format": "uri"
+			}, {
+				"type": "array",
+				"items": {
+					"oneOf": [{
+						"type": "string",
+						"format": "uri"
+					}, {
+						"type": "object"
+					}]
+				}
+			}]
+		},
+		"JsonLdType": {
+			"description": "A type or an array of types that the object represents.",
+			"oneOf": [{
+				"type": "string",
+				"format": "uri"
+			}, {
+				"type": "array",
+				"items": {
+					"type": "string",
+					"format": "uri"
+				}
+			}]
+		},
+		"JsonLdObject": {
+			"type": "object",
+			"description": "Base json-ld object, with @context and @type",
+			"properties": {
+				"@context": {
+					"$ref": "#/definitions/JsonLdContext"
+				},
+				"@type": {
+					"$ref": "#/definitions/JsonLdType"
+				},
+				"@id": {
+					"type": "string",
+					"format": "uri"
+				}
+			}
+		},
+
+		"schema:Thing": {
+			"type": "object",
+			"description": "http://schema.org/Thing"
+		},
+		"schema:CreativeWork": {
+			"description": "http://schema.org/CreativeWork",
+			"allOf": [{
+				"$ref": "#/definitions/schema:Thing"
+			}]
+		},
+		"schema:SoftwareApplication": {
+			"description": "http://schema.org/SoftwareApplication",
+			"allOf": [{
+				"$ref": "#/definitions/schema:CreativeWork"
+			}]
+		},
+		"schema:MediaObject": {
+			"description": "http://schema.org/MediaObject",
+			"allOf": [{
+				"$ref": "#/definitions/schema:CreativeWork"
+			}]
+		},
+		"schema:AudioObject": {
+			"description": "http://schema.org/AudioObject",
+			"allOf": [{
+				"$ref": "#/definitions/schema:MediaObject"
+			}]
+		},
+		"schema:ImageObject": {
+			"description": "http://schema.org/ImageObject",
+			"allOf": [{
+				"$ref": "#/definitions/schema:MediaObject"
+			}]
+		},
+		"schema:VideoObject": {
+			"description": "http://schema.org/VideoObject",
+			"allOf": [{
+				"$ref": "#/definitions/schema:MediaObject"
+			}]
+		},
+
+		"foaf:Agent": {
+			"description": "An entity that can do things. Typical kinds of agents include people, organizations and software systems. See http://xmlns.com/foaf/spec/#term_Agent",
+			"$ref": "#/definitions/JsonLdObject"
+		},
+
+		"w3c:Organization": {
+			"type": "object",
+			"properties": {
+				"subOrganizationOf": {
+					"anyOf": [{
+						"$ref": "#/definitions/w3c:Organization"
+					}, {
+						"type": "null"
+					}]
+				}
+			}
+		},
+		"w3c:Role": {
+			"type": "string",
+			"format": "uri"
+		},
+		"w3c:Status": {
+			"type": "string",
+			"format": "uri"
+		},
+		"w3c:Membership": {
+			"type": "object",
+			"properties": {
+				"member": {
+					"oneOf": [{
+						"$ref": "#/definitions/foaf:Agent"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}, {
+						"type": "null"
+					}]
+				},
+				"organization": {
+					"oneOf": [{
+						"$ref": "#/definitions/w3c:Organization"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}, {
+						"type": "null"
+					}]
+				},
+				"roles": {
+					"oneOf": [{
+						"type": "array",
+						"items": {
+							"$ref": "#/definitions/w3c:Role"
+						}
+					}, {
+						"type": "null"
+					}]
+				},
+				"status": {
+					"oneOf": [{
+						"$ref": "#/definitions/w3c:Status"
+					}, {
+						"type": "null"
+					}]
+				}
+			}
+		},
+
+		"caliper:Context": {
+			"allOf": [{
+				"$ref": "#/definitions/JsonLdContext"
+			}],
+			"type": "string",
+			"format": "regex",
+			"pattern": "^http://purl.imsglobal.org/ctx/caliper/v1/Context$"
+		},
+		"caliper:Object": {
+			"description": "Base Caliper object, with caliper:Context",
+			"allOf": [{
+				"$ref": "#/definitions/JsonLdObject"
+			}],
+			"properties": {
+				"@context": {
+					"$ref": "#/definitions/caliper:Context"
+				}
+			}
+		},
+		"caliper:Entity": {
+			"description": "Base Caliper Entity. Analogous to a Thing (https://schema.org/Thing)",
+			"allOf": [{
+				"$ref": "#/definitions/schema:Thing"
+			}, {
+				"$ref": "#/definitions/caliper:Object"
+			}, {
+				"properties": {
+					"name": {
+						"$ref": "#/definitions/NullableString"
+					},
+					"description": {
+						"$ref": "#/definitions/NullableString"
+					},
+					"extensions": {
+						"type": [
+							"object",
+							"null"
+						]
+					},
+					"dateCreated": {
+						"$ref": "#/definitions/NullableDateTime"
+					},
+					"dateModified": {
+						"$ref": "#/definitions/NullableDateTime"
+					}
+				},
+				"required": [
+					"@id"
+				]
+			}]
+		},
+		"caliper:BaseDigitalResource": {
+			"description": "Caliper representation of a CreativeWork (https://schema.org/CreativeWork)",
+			"allOf": [{
+				"$ref": "#/definitions/schema:CreativeWork"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"objectType": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"alignedLearningObjective": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/caliper:LearningObjective"
+					}
+				},
+				"keywords": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"isPartOf": {
+					"oneOf": [{
+						"$ref": "#/definitions/caliper:DigitalResources"
+					}, {
+						"type": "null"
+					}]
+				},
+				"datePublished": {
+					"description": "http://schema.org/datePublished",
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"version": {
+					"$ref": "#/definitions/NullableString"
+				}
+			},
+			"required": [
+				"@id"
+			]
+		},
+		"caliper:DigitalResource": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/DigitalResource$"
+				}
+			}
+		},
+		"caliper:LearningObjective": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/LearningObjective$"
+				}
+			}
+		},
+		"caliper:WebPage": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/WebPage$"
+				}
+			}
+		},
+
+		"caliper:SoftwareApplication": {
+			"allOf": [{
+				"$ref": "#/definitions/schema:SoftwareApplication"
+			}, {
+				"$ref": "#/definitions/foaf:Agent"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SoftwareApplication$"
+				}
+			}
+		},
+		"caliper:Organization": {
+			"description": "A collection of people organized together into a community or other social, commercial or political structure. The group has some common purpose or reason for existence which goes beyond the set of people belonging to it and can act as an Agent. Organizations are often decomposable into hierarchical structures.",
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Organization"
+			}, {
+				"$ref": "#/definitions/foaf:Agent"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/Organization$"
+				}
+			}
+		},
+
+		"caliper:lis:Person": {
+			"allOf": [{
+				"$ref": "#/definitions/foaf:Agent"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/Person$"
+				}
+			}
+		},
+		"caliper:lis:Group": {
+			"description": "A Caliper LIS Group represents a Course substructure that a Person is able to join as a member.",
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Organization"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/Group$"
+				}
+			}
+		},
+		"caliper:lis:Role": {
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Role"
+			}],
+			"enum": [
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Learner",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#ExternalLearner",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#GuestLearner",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#Instructor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#Learner",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Learner#NonCreditLearner",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#ExternalInstructor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#GuestInstructor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#Lecturer",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Instructor#PrimaryInstructor",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Administrator",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Administrator",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Developer",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#Support",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#SystemAdministrator",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalSupport",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalDeveloper",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Administrator#ExternalSystemAdministrator",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#ContentDeveloper",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ContentDeveloper",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#Librarian",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ContentExpert",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/ContentDeveloper#ExternalContentExpert",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Manager",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#AreaManager",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#CourseCoordinator",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#Observer",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Manager#ExternalObserver",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Member",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Member#Member",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#Mentor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Mentor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Advisor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Auditor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Reviewer",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#Tutor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#LearningFacilitator",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalMentor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalAdvisor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalAuditor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalReviewer",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor#ExternalTutor",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/Mentor/ExternalLearningFacilitator",
+
+				"http://purl.imsglobal.org/vocab/lis/v2/membership#TeachingAssistant",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistant",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#Grader",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantSection",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantSectionAssociation",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantOffering",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantTemplate",
+				"http://purl.imsglobal.org/vocab/lis/v2/membership/TeachingAssistant#TeachingAssistantGroup"
+			]
+		},
+		"caliper:lis:Status": {
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Status"
+			}],
+			"enum": [
+				"http://purl.imsglobal.org/vocab/lis/v2/status#Active",
+				"http://purl.imsglobal.org/vocab/lis/v2/status#Deleted",
+				"http://purl.imsglobal.org/vocab/lis/v2/status#Inactive"
+			]
+		},
+		"caliper:lis:Membership": {
+			"description": "A Caliper Membership is used to define the relationship between objects that can have memberIds and objects that can be memberIds. Objects recognized as having memberIds are CourseOffering, CourseSection and Group, all of which implement the Joinable marker interface. Only a Person object can be a memberId.",
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Membership"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/Membership$"
+				},
+				"member": {
+					"oneOf": [{
+						"$ref": "#/definitions/caliper:lis:Person"
+					}, {
+						"type": "string"
+					}]
+				},
+				"roles": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/caliper:lis:Role"
+					}
+				},
+				"status": {
+					"$ref": "#/definitions/caliper:lis:Status"
+				}
+			}
+		},
+		"caliper:lis:CourseOffering": {
+			"description": "A CourseOffering is the occurrence of a course in a specific term, semester, etc.  A Caliper CourseOffering provides a subset of the CourseOffering properties specified in the IMS LTI 2.0 specification, which in turn, draws inspiration from the IMS LIS 1.0 specification.",
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Organization"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/CourseOffering$"
+				},
+				"courseNumber": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"academicSession": {
+					"$ref": "#/definitions/NullableString"
+				}
+			}
+		},
+		"caliper:lis:CourseSection": {
+			"description": "A CourseSection is a way to represent a group of people associated with a course or class. These groups may include everyone in the class or course, or may be subsets of that whole group. CourseSections may have sub-sections (these are created as separate Group objects linked using the relationship). Examples of a CourseSection are Lecture, Laboratory, Studio, Seminar, etc. There may be several instances of a type of CourseSection e.g., multiple lectures. A Caliper CourseSection provides a subset of the CourseSection properties specified in the IMS LTI 2.0 specification, which in turn, draws inspiration from the IMS LIS 1.0 specification.",
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Organization"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/lis/CourseSection$"
+				},
+				"courseNumber": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"academicSession": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"category": {
+					"$ref": "#/definitions/NullableString"
+				}
+			}
+		},
+
+		"caliper:Session": {
+			"description": "Caliper Session",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Session$"
+				},
+				"actor": {
+					"$ref": "#/definitions/caliper:Agents"
+				},
+				"startedAtTime": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"endedAtTime": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"duration": {
+					"$ref": "#/definitions/NullableDuration"
+				}
+			}
+		},
+
+		"caliper:EPubChapter": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://www.idpf.org/epub/vocab/structure/#chapter$"
+				}
+			}
+		},
+		"caliper:EPubPart": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://www.idpf.org/epub/vocab/structure/#part$"
+				}
+			}
+		},
+		"caliper:EPubSubChapter": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://www.idpf.org/epub/vocab/structure/#subchapter$"
+				}
+			}
+		},
+		"caliper:EPubVolume": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://www.idpf.org/epub/vocab/structure/#volume$"
+				}
+			}
+		},
+		"caliper:Frame": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Frame$"
+				},
+				"index": {
+					"$ref": "#/definitions/NullableNumber"
+				}
+			}
+		},
+		"caliper:Reading": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Reading$"
+				},
+				"learningResourceType": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"educationalUse": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"timeRequired": {
+					"$ref": "#/definitions/NullableString"
+				}
+			}
+		},
+		"caliper:View": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/View$"
+				},
+				"frame": {
+					"$ref": "#/definitions/caliper:Frame"
+				},
+				"actor": {
+					"$ref": "#/definitions/caliper:Agents"
+				},
+				"startedAtTime": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"endedAtTime": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"duration": {
+					"$ref": "#/definitions/NullableDuration"
+				}
+			}
+		},
+		"caliper:SearchResult": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SearchResult$"
+				}
+			}
+		},
+
+		"caliper:BaseAnnotation": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"annotated": {
+					"oneOf": [{
+						"$ref": "#/definitions/caliper:DigitalResources"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				}
+			},
+			"required": [
+				"annotated"
+			]
+		},
+		"caliper:Annotation": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseAnnotation"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Annotation$"
+				}
+			}
+		},
+		"caliper:BookmarkAnnotation": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseAnnotation"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/BookmarkAnnotation$"
+				},
+				"bookmarkNotes": {
+					"$ref": "#/definitions/NullableString"
+				}
+			}
+		},
+		"caliper:HighlightAnnotation": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseAnnotation"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/HighlightAnnotation$"
+				},
+				"selection": {
+					"type": "object",
+					"properties": {
+						"start": {
+							"type": "string"
+						},
+						"end": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"start",
+						"end"
+					]
+				},
+				"selectionText": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"selection",
+				"selectionText"
+			]
+		},
+		"caliper:SharedAnnotation": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseAnnotation"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SharedAnnotation$"
+				},
+				"withAgents": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"oneOf": [{
+							"$ref": "#/definitions/caliper:lis:Person"
+						}, {
+							"$ref": "#/definitions/caliper:lis:Group"
+						}]
+					}
+				}
+			},
+			"required": [
+				"withAgents"
+			]
+		},
+		"caliper:TagAnnotation": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseAnnotation"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/TagAnnotation$"
+				},
+				"tags": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"tags"
+			]
+		},
+
+		"caliper:BaseAssignableDigitalResource": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"properties": {
+				"dateCreated": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"dateModified": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"datePublished": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"dateToStartOn": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"dateToActivate": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"dateToShow": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"dateToSubmit": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"maxAttempts": {
+					"$ref": "#/definitions/NullableInteger"
+				},
+				"maxSubmits": {
+					"$ref": "#/definitions/NullableInteger"
+				},
+				"maxScore": {
+					"$ref": "#/definitions/NullableNumber"
+				}
+			}
+		},
+		"caliper:AssignableDigitalResource": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseAssignableDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AssignableDigitalResource$"
+				}
+			}
+		},
+		"caliper:Attempt": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Attempt$"
+				},
+				"actor": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Agents"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"assignable": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"count": {
+					"$ref": "#/definitions/NullableInteger"
+				},
+				"startedAtTime": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"endedAtTime": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"duration": {
+					"$ref": "#/definitions/NullableDuration"
+				}
+			},
+			"required": [
+				"actor"
+			]
+		},
+		"caliper:Assessment": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseAssignableDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Assessment$"
+				},
+				"assessmentItems": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/caliper:AssessmentItem"
+					}
+				}
+			}
+		},
+		"caliper:AssessmentItem": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseAssignableDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AssessmentItem$"
+				},
+				"isTimeDependent": {
+					"type": "boolean"
+				}
+			}
+		},
+
+		"caliper:BaseResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"assignable": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Agents"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"actor": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Agents"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"attempt": {
+					"$ref": "#/definitions/caliper:Attempt"
+				},
+				"startedAtTime": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"endedAtTime": {
+					"$ref": "#/definitions/NullableDateTime"
+				},
+				"duration": {
+					"$ref": "#/definitions/NullableDuration"
+				}
+			}
+		},
+		"caliper:Response": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Response$"
+				}
+			}
+		},
+		"caliper:FillinBlankResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/FillinBlankResponse$"
+				},
+				"values": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"values"
+			]
+		},
+		"caliper:MultipleChoiceResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/MultipleChoiceResponse$"
+				},
+				"value": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"value"
+			]
+		},
+		"caliper:MultipleResponseResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/MultipleResponseResponse$"
+				},
+				"values": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"values"
+			]
+		},
+		"caliper:SelectTextResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SelectTextResponse$"
+				},
+				"values": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"values"
+			]
+		},
+		"caliper:TrueFalseResponse": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/TrueFalseResponse$"
+				},
+				"value": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"value"
+			]
+		},
+
+		"caliper:Result": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Result$"
+				},
+
+				"assignable": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"actor": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Agents"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				},
+				"normalScore": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"penaltyScore": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"extraCreditScore": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"totalScore": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"curvedTotalScore": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"curveFactor": {
+					"$ref": "#/definitions/NullableNumber"
+				},
+				"comment": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"scoredBy": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Agents"
+					}, {
+						"type": "string",
+						"format": "uri"
+					}]
+				}
+			},
+			"required": [
+				"scoredBy"
+			]
+		},
+
+		"caliper:MediaLocation": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/MediaLocation$"
+				},
+				"currentTime": {
+					"type": "number"
+				}
+			},
+			"required": [
+				"currentTime"
+			]
+		},
+		"caliper:BaseMediaObject": {
+			"allOf": [{
+				"$ref": "#/definitions/schema:MediaObject"
+			}, {
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"properties": {
+				"duration": {
+					"$ref": "#/definitions/NullableNumber"
+				}
+			}
+		},
+		"caliper:MediaObject": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseMediaObject"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/MediaObject$"
+				}
+			}
+		},
+		"caliper:AudioObject": {
+			"allOf": [{
+				"$ref": "#/definitions/schema:AudioObject"
+			}, {
+				"$ref": "#/definitions/caliper:BaseMediaObject"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AudioObject$"
+				},
+				"volumeMin": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"volumeMax": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"volumeLevel": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"muted": {
+					"type": ["boolean", "null"]
+				}
+			}
+		},
+		"caliper:ImageObject": {
+			"allOf": [{
+				"$ref": "#/definitions/schema:ImageObject"
+			}, {
+				"$ref": "#/definitions/caliper:BaseMediaObject"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/ImageObject$"
+				}
+			}
+		},
+		"caliper:VideoObject": {
+			"allOf": [{
+				"$ref": "#/definitions/schema:VideoObject"
+			}, {
+				"$ref": "#/definitions/caliper:BaseMediaObject"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/VideoObject$"
+				}
+			}
+		},
+
+		"caliper:Action": {
+			"type": "string",
+			"format": "uri"
+		},
+
+		"caliper:BaseEvent": {
+			"description": "Core caliper event structure and base class for all events",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Object"
+			}],
+			"properties": {
+				"actor": {
+					"$ref": "#/definitions/caliper:Agents"
+				},
+				"action": {
+					"$ref": "#/definitions/caliper:Action"
+				},
+				"object": {
+					"$ref": "#/definitions/caliper:Entity"
+				},
+				"generated": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Entity"
+					}, {
+						"type": "null"
+					}]
+				},
+				"target": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Entity"
+					}, {
+						"type": "null"
+					}]
+				},
+				"federatedSession": {
+					"$ref": "#/definitions/NullableString"
+				},
+				"edApp": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:SoftwareApplication"
+					}, {
+						"type": "null"
+					}]
+				},
+				"group": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Organizations"
+					}, {
+						"type": "null"
+					}]
+				},
+				"membership": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:Memberships"
+					}, {
+						"type": "null"
+					}]
+				},
+				"eventTime": {
+					"$ref": "#/definitions/DateTime"
+				}
+			},
+			"required": [
+				"@context",
+				"actor",
+				"action",
+				"object",
+				"eventTime"
+			]
+		},
+		"caliper:Event": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/Event$"
+				}
+			}
+		},
+		"caliper:SessionEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SessionEvent$"
+				}
+			},
+			"oneOf": [{
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedIn$"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:SoftwareApplication"
+					},
+					"generated": {
+						"oneOf": [{
+							"type": "null"
+						}, {
+							"allOf": [{
+								"$ref": "#/definitions/caliper:Session"
+							}],
+							"properties": {
+								"startedAtTime": {
+									"$ref": "#/definitions/DateTime"
+								}
+							},
+							"required": ["startedAtTime"]
+						}]
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#LoggedOut$"
+					},
+					"object": {
+						"allOf": [{
+							"$ref": "#/definitions/caliper:Session"
+						}],
+						"properties": {
+							"endedAtTime": {
+								"$ref": "#/definitions/DateTime"
+							}
+						},
+						"required": ["endedAtTime"]
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#TimedOut$"
+					},
+					"object": {
+						"allOf": [{
+							"$ref": "#/definitions/caliper:Session"
+						}],
+						"properties": {
+							"endedAtTime": {
+								"$ref": "#/definitions/DateTime"
+							}
+						},
+						"required": ["endedAtTime"]
+					}
+				}
+			}]
+		},
+		"caliper:NavigationEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/NavigationEvent$"
+				},
+				"action": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#NavigatedTo$"
+				},
+				"object": {
+					"$ref": "#/definitions/caliper:DigitalResources"
+				},
+				"target": {
+					"$ref": "#/definitions/caliper:DigitalResources"
+				},
+				"navigatedFrom": {
+					"anyOf": [{
+						"$ref": "#/definitions/caliper:DigitalResources"
+					}, {
+						"type": "null"
+					}]
+				}
+			}
+		},
+		"caliper:ViewEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/ViewEvent$"
+				},
+				"action": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed$"
+				},
+				"object": {
+					"$ref": "#/definitions/caliper:DigitalResources"
+				}
+			}
+		},
+		"caliper:SearchedEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/SearchedEvent$"
+				},
+				"action": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Searched$"
+				},
+				"object": {
+					"$ref": "#/definitions/caliper:DigitalResources"
+				},
+				"generated": {
+					"$ref": "#/definitions/caliper:SearchResult"
+				}
+			},
+			"required": [
+				"generated"
+			]
+		},
+		"caliper:AnnotationEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AnnotationEvent$"
+				},
+				"object": {
+					"$ref": "#/definitions/caliper:DigitalResources"
+				}
+			},
+			"oneOf": [{
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Bookmarked$"
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:BookmarkAnnotation"
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Highlighted$"
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:HighlightAnnotation"
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Shared$"
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:SharedAnnotation"
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Tagged$"
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:TagAnnotation"
+					}
+				}
+			}],
+			"required": [
+				"generated"
+			]
+		},
+		"caliper:AssessmentEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AssessmentEvent$"
+				}
+			},
+			"oneOf": [{
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Started$"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:Attempt"
+					}
+				},
+				"required": [
+					"generated"
+				]
+			}, {
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Paused",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Restarted",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Submitted"
+						]
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:Attempt"
+					},
+					"target": {
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					}
+				},
+				"required": [
+					"target"
+				]
+			}]
+		},
+		"caliper:AssessmentItemEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AssessmentItemEvent$"
+				}
+			},
+			"oneOf": [{
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Started$"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssessmentItem"
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:Attempt"
+					}
+				},
+				"required": [
+					"generated"
+				]
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Completed$"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssessmentItem"
+					},
+					"target": {
+						"oneOf": [{
+							"type": "null"
+						}, {
+							"$ref": "#/definitions/caliper:Attempt"
+						}]
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:Responses"
+					}
+				},
+				"required": [
+					"generated"
+				]
+			}, {
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Skipped",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Viewed"
+						]
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssessmentItem"
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed$"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:Attempt"
+					},
+					"target": {
+						"$ref": "#/definitions/caliper:AssessmentItem"
+					}
+				},
+				"required": [
+					"target"
+				]
+			}]
+		},
+		"caliper:AssignableEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/AssignableEvent$"
+				}
+			},
+			"oneOf": [{
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Started$"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					},
+					"generated": {
+						"$ref": "#/definitions/caliper:Attempt"
+					}
+				},
+				"required": [
+					"generated"
+				]
+			}, {
+				"properties": {
+					"action": {
+						"type": "string",
+						"format": "regex",
+						"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Completed$"
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:Attempt"
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Activated",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Deactivated",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Showed",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Hid"
+						]
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Reviewed",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Abandoned"
+						]
+					},
+					"object": {
+						"$ref": "#/definitions/caliper:Attempt"
+					},
+					"target": {
+						"$ref": "#/definitions/caliper:AssignableDigitalResources"
+					}
+				},
+				"required": [
+					"target"
+				]
+			}]
+		},
+		"caliper:OutcomeEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/OutcomeEvent$"
+				},
+				"action": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/vocab/caliper/v1/action#Graded$"
+				},
+				"object": {
+					"$ref": "#/definitions/caliper:Attempt"
+				},
+				"target": {
+					"$ref": "#/definitions/caliper:AssignableDigitalResources"
+				},
+				"generated": {
+					"$ref": "#/definitions/caliper:Result"
+				}
+			},
+			"required": [
+				"target",
+				"generated"
+			]
+		},
+		"caliper:MediaEvent": {
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"properties": {
+				"@type": {
+					"type": "string",
+					"format": "regex",
+					"pattern": "^http://purl.imsglobal.org/caliper/v1/MediaEvent$"
+				},
+				"object": {
+					"$ref": "#/definitions/caliper:MediaObjects"
+				}
+			},
+			"oneOf": [{
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#OpenedPopout",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ClosedPopout",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#EnteredFullScreen",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ExitedFullScreen",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSize",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedResolution",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Ended",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedSpeed",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Muted",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Unmuted",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ChangedVolume",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#EnabledClosedCaptioning",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#DisabledClosedCaptioning"
+						]
+					}
+				}
+			}, {
+				"properties": {
+					"action": {
+						"enum": [
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Started",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Rewound",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Resumed",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#ForwardedTo",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#Paused",
+							"http://purl.imsglobal.org/vocab/caliper/v1/action#JumpedTo"
+						]
+					},
+					"target": {
+						"$ref": "#/definitions/caliper:MediaLocation"
+					}
+				},
+				"required": [
+					"target"
+				]
+			}]
+		},
+
+		"caliper:Agents": {
+			"description": "Collection of all Caliper Agents",
+			"allOf": [{
+				"$ref": "#/definitions/foaf:Agent"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:lis:Person"
+			}, {
+				"$ref": "#/definitions/caliper:SoftwareApplication"
+			}, {
+				"$ref": "#/definitions/caliper:Organization"
+			}]
+		},
+		"caliper:Organizations": {
+			"description": "Collection of all Caliper Organizations",
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Organization"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:Organization"
+			}, {
+				"$ref": "#/definitions/caliper:lis:CourseOffering"
+			}, {
+				"$ref": "#/definitions/caliper:lis:CourseSection"
+			}, {
+				"$ref": "#/definitions/caliper:lis:Group"
+			}]
+		},
+		"caliper:Memberships": {
+			"description": "Collection of all Caliper Memberships",
+			"allOf": [{
+				"$ref": "#/definitions/w3c:Membership"
+			}, {
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:lis:Membership"
+			}]
+		},
+		"caliper:MediaObjects": {
+			"description": "Collection of all Caliper MediaObjects",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseMediaObject"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:MediaObject"
+			}, {
+				"$ref": "#/definitions/caliper:AudioObject"
+			}, {
+				"$ref": "#/definitions/caliper:ImageObject"
+			}, {
+				"$ref": "#/definitions/caliper:VideoObject"
+			}]
+		},
+		"caliper:Responses": {
+			"description": "Collection of all Caliper Responses",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseResponse"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:Response"
+			}, {
+				"$ref": "#/definitions/caliper:FillinBlankResponse"
+			}, {
+				"$ref": "#/definitions/caliper:MultipleChoiceResponse"
+			}, {
+				"$ref": "#/definitions/caliper:MultipleResponseResponse"
+			}, {
+				"$ref": "#/definitions/caliper:SelectTextResponse"
+			}, {
+				"$ref": "#/definitions/caliper:TrueFalseResponse"
+			}]
+		},
+		"caliper:AssignableDigitalResources": {
+			"description": "Collection of all Caliper Assignable DigitalResources",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseAssignableDigitalResource"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:AssignableDigitalResource"
+			}, {
+				"$ref": "#/definitions/caliper:Assessment"
+			}, {
+				"$ref": "#/definitions/caliper:AssessmentItem"
+			}]
+		},
+		"caliper:DigitalResources": {
+			"description": "Collection of all Caliper DigitalResources",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseDigitalResource"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:DigitalResource"
+			}, {
+				"$ref": "#/definitions/caliper:AssignableDigitalResources"
+			}, {
+				"$ref": "#/definitions/caliper:EPubChapter"
+			}, {
+				"$ref": "#/definitions/caliper:EPubPart"
+			}, {
+				"$ref": "#/definitions/caliper:EPubSubChapter"
+			}, {
+				"$ref": "#/definitions/caliper:EPubVolume"
+			}, {
+				"$ref": "#/definitions/caliper:Frame"
+			}, {
+				"$ref": "#/definitions/caliper:MediaLocation"
+			}, {
+				"$ref": "#/definitions/caliper:MediaObject"
+			}, {
+				"$ref": "#/definitions/caliper:AudioObject"
+			}, {
+				"$ref": "#/definitions/caliper:ImageObject"
+			}, {
+				"$ref": "#/definitions/caliper:VideoObject"
+			}, {
+				"$ref": "#/definitions/caliper:Reading"
+			}, {
+				"$ref": "#/definitions/caliper:WebPage"
+			}]
+		},
+		"caliper:Entities": {
+			"description": "Collection of all Caliper Entities",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:Entity"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:Agents"
+			}, {
+				"$ref": "#/definitions/caliper:Responses"
+			}, {
+				"$ref": "#/definitions/caliper:DigitalResources"
+			}, {
+				"$ref": "#/definitions/caliper:Session"
+			}, {
+				"$ref": "#/definitions/caliper:Attempt"
+			}, {
+				"$ref": "#/definitions/caliper:Result"
+			}, {
+				"$ref": "#/definitions/caliper:Annotation"
+			}, {
+				"$ref": "#/definitions/caliper:BookmarkAnnotation"
+			}, {
+				"$ref": "#/definitions/caliper:HighlightAnnotation"
+			}, {
+				"$ref": "#/definitions/caliper:SharedAnnotation"
+			}, {
+				"$ref": "#/definitions/caliper:TagAnnotation"
+			}, {
+				"$ref": "#/definitions/caliper:SearchResult"
+			}, {
+				"$ref": "#/definitions/caliper:lis:Group"
+			}, {
+				"$ref": "#/definitions/caliper:lis:Role"
+			}, {
+				"$ref": "#/definitions/caliper:lis:Status"
+			}, {
+				"$ref": "#/definitions/caliper:lis:Membership"
+			}, {
+				"$ref": "#/definitions/caliper:lis:CourseOffering"
+			}, {
+				"$ref": "#/definitions/caliper:lis:CourseSection"
+			}, {
+				"$ref": "#/definitions/caliper:LearningObjective"
+			}]
+		},
+		"caliper:Events": {
+			"description": "Collection of all Caliper Events",
+			"allOf": [{
+				"$ref": "#/definitions/caliper:BaseEvent"
+			}],
+			"oneOf": [{
+				"$ref": "#/definitions/caliper:Event"
+			}, {
+				"$ref": "#/definitions/caliper:SessionEvent"
+			}, {
+				"$ref": "#/definitions/caliper:NavigationEvent"
+			}, {
+				"$ref": "#/definitions/caliper:ViewEvent"
+			}, {
+				"$ref": "#/definitions/caliper:SearchedEvent"
+			}, {
+				"$ref": "#/definitions/caliper:AnnotationEvent"
+			}, {
+				"$ref": "#/definitions/caliper:AssessmentEvent"
+			}, {
+				"$ref": "#/definitions/caliper:AssessmentItemEvent"
+			}, {
+				"$ref": "#/definitions/caliper:AssignableEvent"
+			}, {
+				"$ref": "#/definitions/caliper:OutcomeEvent"
+			}, {
+				"$ref": "#/definitions/caliper:MediaEvent"
+			}]
+		}
+	}
+}
