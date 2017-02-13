@@ -8,14 +8,14 @@
       "@vocab": "http://purl.imsglobal.org/vocab/caliper/v1/",
       "as" : "http://activitystrea.ms/2.0/",
       "caliper": "http://purl.imsglobal.org/caliper/v1/",
-      "rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#", 
+      "rdf" : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
       "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
       "prov": "http://www.w3.org/ns/prov#",
-      "schema" : "http://schema.org/", 
+      "schema" : "http://schema.org/",
 
-      "org" : "http://www.w3.org/ns/org#", 
-      "xs" : "http://www.w3.org/2001/XMLSchema#", 
-      "liscm" : "http://purl.imsglobal.org/vocab/lis/v2/liscm#", 
+      "org" : "http://www.w3.org/ns/org#",
+      "xs" : "http://www.w3.org/2001/XMLSchema#",
+      "liscm" : "http://purl.imsglobal.org/vocab/lis/v2/liscm#",
       "lisp" : "http://purl.imsglobal.org/vocab/lis/v2/pm#"
 
     },
@@ -57,7 +57,7 @@
       "actor": "as:actor",
       "action": "as:verb",
       "object": "as:object",
-      "eventTime": "prov:startedAtTime",
+      "eventTime": "prov:atTime",
 
       "generated": "prov:generated",
       "target": "caliper:target",
