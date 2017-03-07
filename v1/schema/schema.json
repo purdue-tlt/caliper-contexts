@@ -11,31 +11,19 @@
 		},
 		"sendTime": {
 			"$ref": "#/definitions/DateTime"
+		},
+		"data": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"oneOf": [{
+					"$ref": "#/definitions/caliper:Events"
+				}, {
+					"$ref": "#/definitions/caliper:Entities"
+				}]
+			}
 		}
 	},
-	"oneOf": [{
-		"description": "An event store payload containing Caliper Events, for validating Sensor API event payloads.",
-		"properties": {
-			"data": {
-				"type": "array",
-				"minItems": 1,
-				"items": {
-					"$ref": "#/definitions/caliper:Events"
-				}
-			}
-		}
-	}, {
-		"description": "An event store payload containing Caliper Entities, for validating Sensor API DESCRIBE method payloads.",
-		"properties": {
-			"data": {
-				"type": "array",
-				"minItems": 1,
-				"items": {
-					"$ref": "#/definitions/caliper:Entities"
-				}
-			}
-		}
-	}],
 	"required": [
 		"sensor",
 		"sendTime",
