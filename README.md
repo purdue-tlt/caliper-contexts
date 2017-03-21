@@ -18,9 +18,9 @@ Validation of Caliper EventStore payloads is provided using the Caliper [JSON Sc
 
 ### Tests
 
-Unit tests for the Caliper JSON Schema are located in the `test` folder. The tests depend on the [caliper-common-fixtures-public](https://github.com/IMSGlobal/caliper-common-fixtures-public) project, which contains reference Caliper JSON documents. To run the tests follow these steps.
+Unit tests for the Caliper JSON Schema are located in the `test` folder. The tests depend on the [caliper-common-fixtures](https://github.com/purdue-tlt/caliper-common-fixtures) project, which contains reference Caliper JSON documents. To run the tests follow these steps.
 
-Restore the [caliper-common-fixtures-public](https://github.com/IMSGlobal/caliper-common-fixtures-public) submodule
+Restore the [caliper-common-fixtures](https://github.com/purdue-tlt/caliper-common-fixtures) submodule
 ```
 git submodule update --init
 ```
